@@ -1,0 +1,14 @@
+{
+  "name": "pool",
+  "version": "1.0.0",
+  "description": "Web Scrapper with Chrome Headless & Puppeteer",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "screenshot": "node screenshot.js",
+    "pool": "node pool.js"
+  },
+  "dependencies": {
+    "puppeteer": "^5.4.1"
+  }
+}
