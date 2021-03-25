@@ -91,65 +91,99 @@ const bookPool = async () => {
     {
         const targetPage = page;
         const frame = targetPage.mainFrame();
-        const element = await frame.waitForSelector("aria/→");
-        await element.click();
-        await targetPage.screenshot({ path: SCREENSHOTS_PATH + index++ + "_screenshot.png" })
+        try {
+            const element = await frame.waitForSelector("aria/→");
+            await element.click();
+            await targetPage.screenshot({ path: SCREENSHOTS_PATH + index++ + "_screenshot.png" })
+        } catch (e) {
+            console.log(e)
+        }
     }
     {
         const targetPage = page;
         const frame = targetPage.mainFrame();
-        const element = await frame.waitForSelector("aria/→");
-        await element.click();
-        await targetPage.screenshot({ path: SCREENSHOTS_PATH + index++ + "_screenshot.png" })
+        try {
+            const element = await frame.waitForSelector("aria/→");
+            await element.click();
+            await targetPage.screenshot({ path: SCREENSHOTS_PATH + index++ + "_screenshot.png" })
+        } catch (e) {
+            console.log(e)
+        }
     }
     {
         const targetPage = page;
         const frame = targetPage.mainFrame();
-        const element = await frame.waitForSelector("aria/→");
-        await element.click();
-        await targetPage.screenshot({ path: SCREENSHOTS_PATH + index++ + "_screenshot.png" })
+        try {
+            const element = await frame.waitForSelector("aria/→");
+            await element.click();
+            await targetPage.screenshot({ path: SCREENSHOTS_PATH + index++ + "_screenshot.png" })
+        } catch (e) {
+            console.log(e)
+        }
     }
     {
         const targetPage = page;
         const frame = targetPage.mainFrame();
-        const element = await frame.waitForSelector("aria/→");
-        await element.click();
-        await targetPage.screenshot({ path: SCREENSHOTS_PATH + index++ + "_screenshot.png" })
+        try {
+            const element = await frame.waitForSelector("aria/→");
+            await element.click();
+            await targetPage.screenshot({ path: SCREENSHOTS_PATH + index++ + "_screenshot.png" })
+        } catch (e) {
+            console.log(e)
+        }
     }
     {
         const targetPage = page;
         const frame = targetPage.mainFrame();
-        const element = await frame.waitForSelector("aria/→");
-        await element.click();
-        await targetPage.screenshot({ path: SCREENSHOTS_PATH + index++ + "_screenshot.png" })
+        try {
+            const element = await frame.waitForSelector("aria/→");
+            await element.click();
+            await targetPage.screenshot({ path: SCREENSHOTS_PATH + index++ + "_screenshot.png" })
+        } catch (e) {
+            console.log(e)
+        }
     }
     {
         const targetPage = page;
         const frame = targetPage.mainFrame();
-        const element = await frame.waitForSelector("aria/→");
-        await element.click();
-        await targetPage.screenshot({ path: SCREENSHOTS_PATH + index++ + "_screenshot.png" })
+        try {
+            const element = await frame.waitForSelector("aria/→");
+            await element.click();
+            await targetPage.screenshot({ path: SCREENSHOTS_PATH + index++ + "_screenshot.png" })
+        } catch (e) {
+            console.log(e)
+        }
     }
     {
         const targetPage = page;
         const frame = targetPage.mainFrame();
-        const element = await frame.waitForSelector("aria/→");
-        await element.click();
-        await targetPage.screenshot({ path: SCREENSHOTS_PATH + index++ + "_screenshot.png" })
+        try {
+            const element = await frame.waitForSelector("aria/→");
+            await element.click();
+            await targetPage.screenshot({ path: SCREENSHOTS_PATH + index++ + "_screenshot.png" })
+        } catch (e) {
+            console.log(e)
+        }
     }
     {
         const targetPage = page;
-        const frame = targetPage.mainFrame();
-        const element = await frame.waitForSelector("aria/→");
-        await element.click();
-        await targetPage.screenshot({ path: SCREENSHOTS_PATH + index++ + "_screenshot.png" })
+        try {
+            const element = await frame.waitForSelector("aria/→");
+            await element.click();
+            await targetPage.screenshot({ path: SCREENSHOTS_PATH + index++ + "_screenshot.png" })
+        } catch (e) {
+            console.log(e)
+        }
     }
     {
         const targetPage = page;
-        const frame = targetPage.mainFrame();
-        const element = await frame.waitForSelector("aria/→");
-        await element.click();
-        await targetPage.screenshot({ path: SCREENSHOTS_PATH + index++ + "_screenshot.png" })
+        try {
+            const element = await frame.waitForSelector("aria/→");
+            await element.click();
+            await targetPage.screenshot({ path: SCREENSHOTS_PATH + index++ + "_screenshot.png" })
+        } catch (e) {
+            console.log(e)
+        }
     }
     {
         const targetPage = page;
