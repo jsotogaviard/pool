@@ -1,0 +1,9 @@
+version: '3'
+services:
+  pool-cron:
+    build: .
+    restart: always  
+    volumes:
+      - ./reserved_slots.csv:/usr/src/app/reserved_slots.csv
+      - ./log.log:/var/log/cron.log 
+      - ./data:/usr/src/app/data 
