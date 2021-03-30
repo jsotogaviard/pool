@@ -57,7 +57,9 @@ const compare = (b) => {
  */
 const chooseSlot = async (availableSlots) => {
     const bookedSlots = await csvParser().fromFile(BOOKED_SLOTS);
+    console.log("booked Slots" + bookedSlots.map((slot => { return JSON.stringify(slot) })).join("\r\n"))
     var availableNotBookedSlots = availableSlots.filter(compare(bookedSlots));
+    console.log("availableNotBookedSlots " + availableNotBookedSlots.map((slot => { return JSON.stringify(slot) })).join("\r\n"))
     if (availableNotBookedSlots && availableNotBookedSlots.length > 0) {
         return availableNotBookedSlots[0]
     } else {
@@ -75,7 +77,7 @@ const bookPool = async () => {
         console.log(CURRENT_POOL_NAME + " pool does not exist ")
         return
     }
-
+    console.log(CURRENT_POOL_NAME + " : " + CURRENT_TIME)
     // Create debug path because it does not exist
     fs.mkdirSync(DEBUG_PATH);
     
@@ -101,7 +103,7 @@ const bookPool = async () => {
     await wrapper(page, index++, async (frame) => { const element = await frame.waitForSelector("#form_f4", { timeout: TIMEOUT_MS }); await element.click(); await element.type("0678135845") })
 
     // Look for available slots
-    const availableSlots = await page.$$eval('span[class=\"selectable\"]', options => options.map(option => ({
+    const availableSlots = await page.$$eval('span[class=\"disabled\"]', options => options.map(option => ({
         slotTime: option.parentElement.firstChild.innerText.replace(/(\r\n|\n|\r)/gm, " ") + "@" + option.innerHTML,
         dataIdx: option.getAttribute("data-idx")
     })));
@@ -121,7 +123,7 @@ const bookPool = async () => {
             // Retrieve class and make sure the new class is selectable on
             const attr = await page.$$eval('span[data-idx=\"' + chosenSlot.dataIdx + '\"]', el => el.map(x => x.getAttribute("class")));
             console.log(CURRENT_POOL_NAME + ": Class of chosen slot after click " + JSON.stringify(attr))
-            if (attr && attr.length > 0 && attr[0] == "selectable on") { 
+            if (attr && attr.length > 0 && attr[0] == "disabled") { 
                
                 // We can proceed. Validate the form
                 await wrapper(page, index++, async (frame) => { const element = await frame.waitForSelector('button[value=\"Valider\"]', { timeout: TIMEOUT_MS }); await element.click(); await page.waitForNavigation(); })
@@ -129,8 +131,8 @@ const bookPool = async () => {
                 // Make sure we receive confirmation from the server
                 const body = await page.evaluate(() => { return document.body.innerText });
                 fs.writeFileSync(DEBUG_PATH +  "confirmation.txt", body);
-                if (!body.includes("Vérifiez que vous avez rempli tous les champs correctement")) { //FIXME Change for token retrieval
-                    console.log(CURRENT_POOL_NAME + ": confirmed chosen slot " + JSON.stringify(chosenSlot))
+                if (body.includes("Vérifiez que vous avez rempli tous les champs correctement")) { //FIXME Change for token retrieval
+                    console.log(CURRENT_POOL_NAME + ": Confirmed chosen slot " + JSON.stringify(chosenSlot))
                     let elapsed = new Date() - start; elapsed /= 1000; const seconds = Math.round(elapsed);
                     const bookedSlot = {
                         currentTime:CURRENT_TIME,
@@ -140,8 +142,10 @@ const bookPool = async () => {
                         token:''
                     };
                     const csv = new ObjectsToCsv([bookedSlot])
-                    await csv.toDisk(RESERVED_SLOTS, { append: true })
+                    await csv.toDisk(BOOKED_SLOTS, { append: true })
                     console.log(CURRENT_POOL_NAME + ": Confirmed chosen slot and written to csv file" + JSON.stringify(bookedSlot))
+                } else {
+                    console.log(CURRENT_POOL_NAME + ": Wrong confirmation page...")
                 }
             }
         }
