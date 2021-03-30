@@ -12,7 +12,7 @@ const wrapper = async (page, index, action) => {
         const frame = page.mainFrame();
         await action(frame)
         await page.screenshot({ path: DEBUG_PATH +  index + "_screenshot.png" })
-        const html = await page.content();
+        const html = await page.evaluate(() => document.querySelector('*').outerHTML);
         fs.writeFileSync(DEBUG_PATH + index + "_page.html", html);
     } catch (error) {
         console.log(error)
