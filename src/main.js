@@ -1,18 +1,33 @@
+// Imports
 import puppeteer from "puppeteer"
 import ObjectsToCsv from 'objects-to-csv'
 import csvParser from 'csvtojson'
 import fs from 'fs'
-const RESERVED_SLOTS = "reserved_slots.csv"
+
+// Constants
+const BOOKED_SLOTS = "slots/slots.csv"
 const TIMEOUT_MS = 3000
-const time = new Date().toLocaleString().replaceAll("/", "_").replaceAll(", ", "_").replaceAll(":", "_")
-const DEBUG_PATH = "./data/" + time + "/" 
-console.log(time)
+const CURRENT_TIME = new Date().toLocaleString().replaceAll("/", "_").replaceAll(", ", "_").replaceAll(":", "_").replaceAll(" ", "_")
+
+const POOLS = {
+    bellevue: 6,
+    castex: 5
+}
+const CURRENT_POOL_NAME = process.argv[2]
+const CURRENT_POOL_ID = POOLS[CURRENT_POOL_NAME]
+const DEBUG_PATH = "./data/" + CURRENT_TIME + "_" + CURRENT_POOL_NAME + "/"
+
+/**
+ * Wrap actions 
+ * @param {*} page 
+ * @param {*} index 
+ * @param {*} action 
+ */
 const wrapper = async (page, index, action) => {
     try {
-        console.log(index)
         const frame = page.mainFrame();
         await action(frame)
-        await page.screenshot({ path: DEBUG_PATH +  index + "_screenshot.png" })
+        await page.screenshot({ path: DEBUG_PATH + index + "_screenshot.png" })
         const html = await page.evaluate(() => document.querySelector('*').outerHTML);
         fs.writeFileSync(DEBUG_PATH + index + "_page.html", html);
     } catch (error) {
@@ -21,83 +36,119 @@ const wrapper = async (page, index, action) => {
 
 }
 
+/**
+ * Compare two arrays of objects on the date
+ * 
+ * @param {*} b 
+ * @returns 
+ */
 const compare = (b) => {
     return function (a) {
-        return b.filter(function (other) {
-            return other.date == a.date
-        }).length == 0;
+        return b.filter(function (other) { return other.slotTime == a.slotTime }).length == 0;
     }
 }
 
+/**
+ * Choose slot from available slots
+ * The only condition is that we have not previously booked it
+ * 
+ * @param {*} availableSlots 
+ * @returns 
+ */
 const chooseSlot = async (availableSlots) => {
-    const reservedSlots = await csvParser().fromFile(RESERVED_SLOTS);
-    var result = availableSlots.filter(compare(reservedSlots));
-    if (result && result.length > 0) {
-        return result[0]
+    const bookedSlots = await csvParser().fromFile(BOOKED_SLOTS);
+    var availableNotBookedSlots = availableSlots.filter(compare(bookedSlots));
+    if (availableNotBookedSlots && availableNotBookedSlots.length > 0) {
+        return availableNotBookedSlots[0]
     } else {
         return null
     }
 
 }
 
+/**
+ * Main function that does the work
+ * 
+ */
 const bookPool = async () => {
-
- 
-    if (!fs.existsSync(DEBUG_PATH)){
-        fs.mkdirSync(DEBUG_PATH);
+    if(!CURRENT_POOL_ID){
+        console.log(CURRENT_POOL_NAME + " pool does not exist ")
+        return
     }
+
+    // Create debug path because it does not exist
+    fs.mkdirSync(DEBUG_PATH);
+    
+    // Start browser
     const browser = await puppeteer.launch({ headless: true, devtools: false, slowMo: 0, args: ['--no-sandbox'] });
     const page = await browser.newPage();
     let index = 0
     const start = new Date();
+
     // Go to web page
     await wrapper(page, index++, async _ => { await page.goto("https://demarches-montoulouse.eservices.toulouse-metropole.fr/loisirs/reserver-une-place-a-la-piscine/", { waitUntil: 'networkidle2' }); })
-    // Select bellevue piscine
-    await wrapper(page, index++, async (frame) => { await frame.select('select#form_f8', '6'); })
-    // click on accept checkbox
-    await wrapper(page, index++, async (frame) => { let element = await frame.waitForSelector("#form_f16");await element.click();})
-    // Fill name, surname, email and phone
-    await wrapper(page, index++, async (frame) => { let element = await frame.waitForSelector("#form_f1", { timeout: TIMEOUT_MS }); await element.click(); await element.type("Soto") })
-    await wrapper(page, index++, async (frame) => { let element = await frame.waitForSelector("#form_f2", { timeout: TIMEOUT_MS }); await element.click(); await element.type("Jonathan") })
-    await wrapper(page, index++, async (frame) => { let element = await frame.waitForSelector("#form_f21", { timeout: TIMEOUT_MS }); await element.click(); await element.type("jsotogaviard@gmail.com") })
-    await wrapper(page, index++, async (frame) => { let element = await frame.waitForSelector("#form_f4", { timeout: TIMEOUT_MS }); await element.click(); await element.type("0678135845") })
     
+    // Select bellevue piscine
+    await wrapper(page, index++, async (frame) => { await frame.select('select#form_f8', CURRENT_POOL_ID.toString()); })
+    
+    // Click on accept checkbox
+    await wrapper(page, index++, async (frame) => { const element = await frame.waitForSelector("#form_f16"); await element.click(); })
+    
+    // Fill name, surname, email and phone
+    await wrapper(page, index++, async (frame) => { const element = await frame.waitForSelector("#form_f1", { timeout: TIMEOUT_MS }); await element.click(); await element.type("Soto") })
+    await wrapper(page, index++, async (frame) => { const element = await frame.waitForSelector("#form_f2", { timeout: TIMEOUT_MS }); await element.click(); await element.type("Jonathan") })
+    await wrapper(page, index++, async (frame) => { const element = await frame.waitForSelector("#form_f21", { timeout: TIMEOUT_MS }); await element.click(); await element.type("jsotogaviard@gmail.com") })
+    await wrapper(page, index++, async (frame) => { const element = await frame.waitForSelector("#form_f4", { timeout: TIMEOUT_MS }); await element.click(); await element.type("0678135845") })
+
     // Look for available slots
-    const availableSlots = await page.$$eval('span[class=\"selectable\"]', options => options.map(option => ({//FIXME selectable
-        date: option.parentElement.firstChild.innerText.replace(/(\r\n|\n|\r)/gm, "") + "@" + option.innerHTML,
+    const availableSlots = await page.$$eval('span[class=\"selectable\"]', options => options.map(option => ({
+        slotTime: option.parentElement.firstChild.innerText.replace(/(\r\n|\n|\r)/gm, " ") + "@" + option.innerHTML,
         dataIdx: option.getAttribute("data-idx")
     })));
-    console.log("Number of slots " + availableSlots.length)
-    console.log("Available slots " + availableSlots.map((slot => { return JSON.stringify(slot) })).join("\r\n"))
+    console.log(CURRENT_POOL_NAME + ": # avalaible slots " + availableSlots.length)
     if (availableSlots && availableSlots.length > 0) {
 
         // Select first one and click on it
+        console.log(CURRENT_POOL_NAME + ": Available slots list " + availableSlots.map((slot => { return JSON.stringify(slot) })).join("\r\n"))
         const chosenSlot = await chooseSlot(availableSlots)
         if (chosenSlot) {
-            console.log("Chosen slot " + JSON.stringify(chosenSlot))
-            await wrapper(page, index++, async (frame) => { let element = await frame.waitForSelector('span[data-idx=\"' + chosenSlot.dataIdx + '\"]', { timeout: TIMEOUT_MS }); await element.click() })
+
+            // Click on chosen slot
+            console.log(CURRENT_POOL_NAME + ": Chosen slot " + JSON.stringify(chosenSlot))
+            await wrapper(page, index++, async (frame) => { const element = await frame.waitForSelector('span[data-idx=\"' + chosenSlot.dataIdx + '\"]', { timeout: TIMEOUT_MS }); await element.click() })
+
+            // Selectable class must change in selectable on class
+            // Retrieve class and make sure the new class is selectable on
             const attr = await page.$$eval('span[data-idx=\"' + chosenSlot.dataIdx + '\"]', el => el.map(x => x.getAttribute("class")));
-            console.log(JSON.stringify(attr))
-            if (attr && attr.length > 0 && attr[0] == "selectable on") { //FIXME selectable on
-                // We can proceed
-                // Validate
-                await wrapper(page, index++, async (frame) => { let element = await frame.waitForSelector('button[value=\"Valider\"]', { timeout: TIMEOUT_MS }); await element.click(); await page.waitForNavigation(); })
+            console.log(CURRENT_POOL_NAME + ": Class of chosen slot after click " + JSON.stringify(attr))
+            if (attr && attr.length > 0 && attr[0] == "selectable on") { 
+               
+                // We can proceed. Validate the form
+                await wrapper(page, index++, async (frame) => { const element = await frame.waitForSelector('button[value=\"Valider\"]', { timeout: TIMEOUT_MS }); await element.click(); await page.waitForNavigation(); })
 
                 // Make sure we receive confirmation from the server
                 const body = await page.evaluate(() => { return document.body.innerText });
-                if (!body.includes("Vérifiez que vous avez rempli tous les champs correctement")) { //FIXME add !
-                    console.log("Confirmed chosen slot " + JSON.stringify(chosenSlot))
-                    const csv = new ObjectsToCsv([chosenSlot])
+                fs.writeFileSync(DEBUG_PATH +  "confirmation.txt", body);
+                if (!body.includes("Vérifiez que vous avez rempli tous les champs correctement")) { //FIXME Change for token retrieval
+                    console.log(CURRENT_POOL_NAME + ": confirmed chosen slot " + JSON.stringify(chosenSlot))
+                    let elapsed = new Date() - start; elapsed /= 1000; const seconds = Math.round(elapsed);
+                    const bookedSlot = {
+                        currentTime:CURRENT_TIME,
+                        duration:seconds,
+                        slotTime:chosenSlot.slotTime,
+                        pool: CURRENT_POOL_NAME,
+                        token:''
+                    };
+                    const csv = new ObjectsToCsv([bookedSlot])
                     await csv.toDisk(RESERVED_SLOTS, { append: true })
-                    console.log("Confirmed chosen slot and written to csv file" + JSON.stringify(chosenSlot))
+                    console.log(CURRENT_POOL_NAME + ": Confirmed chosen slot and written to csv file" + JSON.stringify(bookedSlot))
                 }
             }
         }
     }
     await browser.close()
-    const end = new Date();
-    let elapsed = end - start; elapsed /= 1000; let seconds = Math.round(elapsed);
-    console.log(seconds + " seconds");
+    let elapsed = new Date() - start; elapsed /= 1000; const seconds = Math.round(elapsed);
+    console.log(CURRENT_POOL_NAME + ": Duration " + seconds + " seconds");
 }
 
 bookPool()

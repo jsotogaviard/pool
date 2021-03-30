@@ -4,6 +4,6 @@ services:
     build: .
     restart: always  
     volumes:
-      - ./reserved_slots.csv:/usr/src/app/reserved_slots.csv
-      - ./log.log:/var/log/cron.log 
+      - ./slots/slots.csv:/usr/src/app/slots/slots.csv
+      - ./log:/var/log/
       - ./data:/usr/src/app/data 
