@@ -23,7 +23,7 @@ const wrapper = async (page, index, action) => {
 const compare = (b) => {
     return function (a) {
         return b.filter(function (other) {
-            return other.date == a.date && other.dataIdx == a.dataIdx
+            return other.date == a.date
         }).length == 0;
     }
 }
