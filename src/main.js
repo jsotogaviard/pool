@@ -103,7 +103,7 @@ const bookPool = async () => {
     await wrapper(page, index++, async (frame) => { const element = await frame.waitForSelector("#form_f4", { timeout: TIMEOUT_MS }); await element.click(); await element.type("0678135845") })
 
     // Look for available slots
-    const availableSlots = await page.$$eval('span[class=\"disabled\"]', options => options.map(option => ({
+    const availableSlots = await page.$$eval('span[class=\"selectable\"]', options => options.map(option => ({
         slotTime: option.parentElement.firstChild.innerText.replace(/(\r\n|\n|\r)/gm, " ") + "@" + option.innerHTML,
         dataIdx: option.getAttribute("data-idx")
     })));
@@ -123,7 +123,7 @@ const bookPool = async () => {
             // Retrieve class and make sure the new class is selectable on
             const attr = await page.$$eval('span[data-idx=\"' + chosenSlot.dataIdx + '\"]', el => el.map(x => x.getAttribute("class")));
             console.log(CURRENT_POOL_NAME + ": Class of chosen slot after click " + JSON.stringify(attr))
-            if (attr && attr.length > 0 && attr[0] == "disabled") { 
+            if (attr && attr.length > 0 && attr[0] == "selectable on") { 
                
                 // We can proceed. Validate the form
                 await wrapper(page, index++, async (frame) => { const element = await frame.waitForSelector('button[value=\"Valider\"]', { timeout: TIMEOUT_MS }); await element.click(); await page.waitForNavigation(); })
