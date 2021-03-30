@@ -4,8 +4,9 @@ import csvParser from 'csvtojson'
 import fs from 'fs'
 const RESERVED_SLOTS = "reserved_slots.csv"
 const TIMEOUT_MS = 3000
-const DEBUG_PATH = "./data/" + new Date().toLocaleString().replaceAll("/", "_").replaceAll(", ", "_").replaceAll(":", "_") + "/" 
-
+const time = new Date().toLocaleString().replaceAll("/", "_").replaceAll(", ", "_").replaceAll(":", "_")
+const DEBUG_PATH = "./data/" + time + "/" 
+console.log(time)
 const wrapper = async (page, index, action) => {
     try {
         console.log(index)
