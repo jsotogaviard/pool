@@ -131,7 +131,7 @@ const bookPool = async () => {
                 // Make sure we receive confirmation from the server
                 const body = await page.evaluate(() => { return document.body.innerText });
                 fs.writeFileSync(DEBUG_PATH +  "confirmation.txt", body);
-                if (body.includes("Vérifiez que vous avez rempli tous les champs correctement")) { //FIXME Change for token retrieval
+                if (body.includes("Le créneau est réservé")) {
                     console.log(CURRENT_POOL_NAME + ": Confirmed chosen slot " + JSON.stringify(chosenSlot))
                     let elapsed = new Date() - start; elapsed /= 1000; const seconds = Math.round(elapsed);
                     const bookedSlot = {
