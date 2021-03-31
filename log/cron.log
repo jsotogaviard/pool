@@ -1,0 +1,70 @@
+
+> main@1.0.0 main
+> node src/main.js "castex"
+
+
+> main@1.0.0 main
+> node src/main.js "bellevue"
+
+castex : 3_31_2021_7_02_02_AM
+bellevue : 3_31_2021_7_02_02_AM
+castex: # avalaible slots 0
+castex: Duration 4 seconds
+bellevue: # avalaible slots 0
+bellevue: Duration 4 seconds
+
+> main@1.0.0 main
+> node src/main.js "bellevue"
+
+
+> main@1.0.0 main
+> node src/main.js "castex"
+
+bellevue : 3_31_2021_7_03_01_AM
+castex : 3_31_2021_7_03_01_AM
+castex: # avalaible slots 0
+castex: Duration 4 seconds
+bellevue: # avalaible slots 0
+bellevue: Duration 4 seconds
+
+> main@1.0.0 main
+> node src/main.js "castex"
+
+
+> main@1.0.0 main
+> node src/main.js "bellevue"
+
+castex : 3_31_2021_7_04_02_AM
+bellevue : 3_31_2021_7_04_02_AM
+bellevue: # avalaible slots 0
+bellevue: Duration 4 seconds
+castex: # avalaible slots 0
+castex: Duration 4 seconds
+
+> main@1.0.0 main
+> node src/main.js "bellevue"
+
+
+> main@1.0.0 main
+> node src/main.js "castex"
+
+bellevue : 3_31_2021_7_05_02_AM
+castex : 3_31_2021_7_05_02_AM
+castex: # avalaible slots 0
+castex: Duration 4 seconds
+bellevue: # avalaible slots 0
+bellevue: Duration 4 seconds
+
+> main@1.0.0 main
+> node src/main.js "castex"
+
+
+> main@1.0.0 main
+> node src/main.js "bellevue"
+
+castex : 3_31_2021_7_06_01_AM
+bellevue : 3_31_2021_7_06_01_AM
+castex: # avalaible slots 0
+bellevue: # avalaible slots 0
+castex: Duration 4 seconds
+bellevue: Duration 4 seconds
