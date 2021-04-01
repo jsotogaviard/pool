@@ -41,7 +41,7 @@ describe("One booked slot", () => {
     console.log("RESULT : " + JSON.stringify(result))
     expect(result.freeSlots).toEqual([])
     expect(result.bookedSlots.length).toEqual(1)
-    expect(result.bookedSlots[0].slotTime).toEqual("mercredi31 mars 2021@16:00")//FIXME
+    expect(result.bookedSlots[0].slotTime).toEqual("mercredi31 mars 2021@16:00")
     expect(result.bookedSlots[0].pool).toEqual(pool)
     expect(result.chosenSlot).toBeUndefined();
     expect(result.confirmedSlot).toBeUndefined();
@@ -67,10 +67,10 @@ describe("One booked slot", () => {
     )
     //console.log("RESULT : " + JSON.stringify(result))
     expect(result.freeSlots.length).toEqual(1)
-    expect(result.freeSlots[0].slotTime).toEqual("mercredi31 mars 2021@16:00")//FIXME
+    expect(result.freeSlots[0].slotTime).toEqual("mercredi31 mars 2021@16:00")
     expect(result.freeSlots[0].pool).toEqual(pool)
     expect(result.bookedSlots.length).toEqual(1)
-    expect(result.bookedSlots[0].slotTime).toEqual("mercredi31 mars 2021@16:00")//FIXME
+    expect(result.bookedSlots[0].slotTime).toEqual("mercredi31 mars 2021@16:00")
     expect(result.bookedSlots[0].pool).toEqual(pool)
     expect(result.chosenSlot).toBeUndefined();
     expect(result.confirmedSlot).toBeUndefined();
@@ -97,25 +97,25 @@ describe("One booked slot", () => {
     //console.log("RESULT : " + JSON.stringify(result))
     let i = 0
     expect(result.freeSlots.length).toEqual(4)
-    expect(result.freeSlots[i].slotTime).toEqual("jeudi1 avril 2021@16:00")//FIXME
+    expect(result.freeSlots[i].slotTime).toEqual("jeudi1 avril 2021@16:00")
     expect(result.freeSlots[i].pool).toEqual(pool)
     i++
-    expect(result.freeSlots[i].slotTime).toEqual("vendredi2 avril 2021@16:00")//FIXME
+    expect(result.freeSlots[i].slotTime).toEqual("vendredi2 avril 2021@16:00")
     expect(result.freeSlots[i].pool).toEqual(pool)
     i++
-    expect(result.freeSlots[i].slotTime).toEqual("samedi3 avril 2021@15:45")//FIXME
+    expect(result.freeSlots[i].slotTime).toEqual("samedi3 avril 2021@15:45")
     expect(result.freeSlots[i].pool).toEqual(pool)
     i++
-    expect(result.freeSlots[i].slotTime).toEqual("dimanche4 avril 2021@15:45")//FIXME 
+    expect(result.freeSlots[i].slotTime).toEqual("dimanche4 avril 2021@15:45")
     expect(result.freeSlots[i].pool).toEqual(pool)
     expect(result.bookedSlots.length).toEqual(1)
-    expect(result.bookedSlots[0].slotTime).toEqual("jeudi1 avril 2021@16:00")//FIXME
+    expect(result.bookedSlots[0].slotTime).toEqual("jeudi1 avril 2021@16:00")
     expect(result.bookedSlots[0].pool).toEqual(pool)
-    expect(result.chosenSlot.slotTime).toEqual("vendredi2 avril 2021@16:00")//FIXME
+    expect(result.chosenSlot.slotTime).toEqual("vendredi2 avril 2021@16:00")
     expect(result.chosenSlot.pool).toEqual(pool)
-    expect(result.confirmedSlot.slotTime).toEqual("vendredi2 avril 2021@16:00")//FIXME
+    expect(result.confirmedSlot.slotTime).toEqual("vendredi2 avril 2021@16:00")
     expect(result.confirmedSlot.pool).toEqual(pool)
-    expect(result.storedSlot.slotTime).toEqual("vendredi2 avril 2021@16:00")//FIXME 
+    expect(result.storedSlot.slotTime).toEqual("vendredi2 avril 2021@16:00")
     expect(result.storedSlot.pool).toEqual(pool)
     const duration = Math.round((new Date() - startTest) / 1000);
     console.log(duration + " seconds")

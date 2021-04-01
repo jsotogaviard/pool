@@ -51,19 +51,17 @@ const getFreeSlots = async (debugPath, freeSlotsUrl, poolName) => {
     // Select the pool
     await wrapper(page, index++, debugPath, async (frame) => { await frame.select('select#form_f8', poolId.toString()); })
 
-    await page.$$eval('span[class=\"selectable\"]', options => options.forEach(
-        option => (console.log(option.parentElement.firstChild.innerText))
-    ));
-
-    const freeSlots = await page.$$eval('span[class=\"selectable\"]', options => options.map(
+   const freeSlots = await page.$$eval('span[class=\"selectable\"]', options => options.map(
         option => (
             {
-                slotTime: option.parentElement.firstChild.innerText.replace(/(\r\n|\n|\r|<br>)/gm, " ") + "@" + option.innerHTML,
+                slotTime: option.parentElement.firstChild.innerText.replace(/(\r\n|\n|\r)/gm, " ") + "@" + option.innerHTML,
                 dataIdx: option.getAttribute("data-idx"),
-                pool: 'bellevue' //FIXME
             }
         )
     ));
+    freeSlots.forEach((freeSlot) => {
+        freeSlot.pool = poolName
+    })
     console.log("# of free slots " + freeSlots.length)
     if (freeSlots.length > 0) {
         console.log("Free slots : " + freeSlots.map((slot => { return JSON.stringify(slot) })).join("\r\n"))

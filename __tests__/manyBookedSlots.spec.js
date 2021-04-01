@@ -42,10 +42,10 @@ describe("Many booked slot", () => {
     expect(result.freeSlots).toEqual([])
     let i = 0
     expect(result.bookedSlots.length).toEqual(2)
-    expect(result.bookedSlots[i].slotTime).toEqual("mercredi31 mars 2021@16:00")//FIXME
+    expect(result.bookedSlots[i].slotTime).toEqual("mercredi31 mars 2021@16:00")
     expect(result.bookedSlots[i].pool).toEqual(pool)
     i++
-    expect(result.bookedSlots[i].slotTime).toEqual("jeudi1 avril 2021@16:00")//FIXME
+    expect(result.bookedSlots[i].slotTime).toEqual("jeudi1 avril 2021@16:00")
     expect(result.bookedSlots[i].pool).toEqual(pool)
     expect(result.chosenSlot).toBeUndefined();
     expect(result.confirmedSlot).toBeUndefined();
@@ -71,16 +71,16 @@ describe("Many booked slot", () => {
     )
     //console.log("RESULT : " + JSON.stringify(result))
     expect(result.freeSlots.length).toEqual(1)
-    expect(result.freeSlots[0].slotTime).toEqual("mercredi31 mars 2021@16:00")//FIXME
+    expect(result.freeSlots[0].slotTime).toEqual("mercredi31 mars 2021@16:00")
     expect(result.freeSlots[0].pool).toEqual(pool)
     let i = 0
     expect(result.bookedSlots.length).toEqual(2)
-    expect(result.bookedSlots[i].slotTime).toEqual("mercredi31 mars 2021@16:00")//FIXME
+    expect(result.bookedSlots[i].slotTime).toEqual("mercredi31 mars 2021@16:00")
     expect(result.bookedSlots[i].pool).toEqual(pool)
     i++
-    expect(result.bookedSlots[i].slotTime).toEqual("jeudi1 avril 2021@16:00")//FIXME
+    expect(result.bookedSlots[i].slotTime).toEqual("jeudi1 avril 2021@16:00")
     expect(result.bookedSlots[i].pool).toEqual(pool)
-    
+
     expect(result.chosenSlot).toBeUndefined();
     expect(result.confirmedSlot).toBeUndefined();
     expect(result.storedSlot).toBeUndefined();
@@ -106,30 +106,30 @@ describe("Many booked slot", () => {
     //console.log("RESULT : " + JSON.stringify(result))
     let i = 0
     expect(result.freeSlots.length).toEqual(4)
-    expect(result.freeSlots[i].slotTime).toEqual("jeudi1 avril 2021@16:00")//FIXME
+    expect(result.freeSlots[i].slotTime).toEqual("jeudi1 avril 2021@16:00")
     expect(result.freeSlots[i].pool).toEqual(pool)
     i++
-    expect(result.freeSlots[i].slotTime).toEqual("vendredi2 avril 2021@16:00")//FIXME
+    expect(result.freeSlots[i].slotTime).toEqual("vendredi2 avril 2021@16:00")
     expect(result.freeSlots[i].pool).toEqual(pool)
     i++
-    expect(result.freeSlots[i].slotTime).toEqual("samedi3 avril 2021@15:45")//FIXME
+    expect(result.freeSlots[i].slotTime).toEqual("samedi3 avril 2021@15:45")
     expect(result.freeSlots[i].pool).toEqual(pool)
     i++
-    expect(result.freeSlots[i].slotTime).toEqual("dimanche4 avril 2021@15:45")//FIXME 
+    expect(result.freeSlots[i].slotTime).toEqual("dimanche4 avril 2021@15:45")
     expect(result.freeSlots[i].pool).toEqual(pool)
     let j = 0
     expect(result.bookedSlots.length).toEqual(2)
-    expect(result.bookedSlots[j].slotTime).toEqual("jeudi1 avril 2021@16:00")//FIXME
+    expect(result.bookedSlots[j].slotTime).toEqual("jeudi1 avril 2021@16:00")
     expect(result.bookedSlots[j].pool).toEqual(pool)
     j++
-    expect(result.bookedSlots[j].slotTime).toEqual("vendredi2 avril 2021@16:00")//FIXME
+    expect(result.bookedSlots[j].slotTime).toEqual("vendredi2 avril 2021@16:00")
     expect(result.bookedSlots[j].pool).toEqual(pool)
-    
-    expect(result.chosenSlot.slotTime).toEqual("samedi3 avril 2021@15:45")//FIXME
+
+    expect(result.chosenSlot.slotTime).toEqual("samedi3 avril 2021@15:45")
     expect(result.chosenSlot.pool).toEqual(pool)
-    expect(result.confirmedSlot.slotTime).toEqual("samedi3 avril 2021@15:45")//FIXME
+    expect(result.confirmedSlot.slotTime).toEqual("samedi3 avril 2021@15:45")
     expect(result.confirmedSlot.pool).toEqual(pool)
-    expect(result.storedSlot.slotTime).toEqual("samedi3 avril 2021@15:45")//FIXME 
+    expect(result.storedSlot.slotTime).toEqual("samedi3 avril 2021@15:45")
     expect(result.storedSlot.pool).toEqual(pool)
     const duration = Math.round((new Date() - startTest) / 1000);
     console.log(duration + " seconds")

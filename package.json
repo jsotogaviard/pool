@@ -10,8 +10,8 @@
   "scripts": {
     "main": "node --experimental-vm-modules src/main.js",
     "debug-main": "node --inspect-brk src/main.js",
-    "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --runInBand",
-    "debug-test": "node --experimental-vm-modules --inspect-brk ./node_modules/jest/bin/jest.js --runInBand --watchAll"
+    "test": "node  --trace-warnings --experimental-vm-modules ./node_modules/jest/bin/jest.js --runInBand",
+    "debug-test": "node  --trace-warnings --experimental-vm-modules --inspect-brk ./node_modules/jest/bin/jest.js --runInBand --watchAll"
   },
   "dependencies": {
     "csvtojson": "",
