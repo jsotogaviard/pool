@@ -2,7 +2,7 @@ const timeout = 20000
 import path from 'path'
 import fs from 'fs'
 import os from 'os'
-import { main } from '../src/main'
+import { main } from '../src/tools.js'
 const TEMPORARY_DIRECTORY = os.tmpdir()
 const HEADERS = "bookingTime,duration,slotTime,pool,"
 
