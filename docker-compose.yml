@@ -5,5 +5,4 @@ services:
     restart: always  
     volumes:
       - ./slots/slots.csv:/usr/src/app/slots/slots.csv
-      - ./log:/var/log/
       - ./data:/usr/src/app/data 

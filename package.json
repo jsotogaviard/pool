@@ -4,15 +4,14 @@
   "main": "index.js",
   "type": "module",
   "jest": {
-    "globalSetup": "./setup.cjs",
-    "globalTeardown": "./teardown.cjs",
-    "testEnvironment": "./puppeteer_environment.cjs"
+    "testEnvironment": "jest-environment-node",
+    "transform": {}
   },
   "scripts": {
     "main": "node src/main.js",
     "debug-main": "node --inspect-brk src/main.js",
-    "test": "jest",
-    "debug-test": "node --inspect-brk ./node_modules/jest/bin/jest.js --runInBand"
+    "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --runInBand",
+    "debug-test": "node --experimental-vm-modules --inspect-brk ./node_modules/jest/bin/jest.js --runInBand --watchAll"
   },
   "dependencies": {
     "csvtojson": "",
@@ -20,8 +19,7 @@
     "objects-to-csv": ""
   },
   "devDependencies": {
-    "chalk": "^2.4.2",
-    "jest": "^24.8.0",
+    "jest": "^25.4.0",
     "prettier": "^1.18.2",
     "puppeteer": "^1.17.0",
     "rimraf": "^2.6.3"

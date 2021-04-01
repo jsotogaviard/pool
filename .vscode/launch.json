@@ -6,9 +6,12 @@
       "type": "node",
       "request": "launch",
       "runtimeArgs": [
+        "--experimental-vm-modules",
+        "--trace-warnings",
         "--inspect-brk",
         "./node_modules/jest/bin/jest.js",
-        "--runInBand"
+        "--runInBand",
+        "--watchAll"
       ],
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
