@@ -157,12 +157,13 @@ const confirmSlot = async (debugPath, freeSlotsUrl, chosenSlot) => {
     // Click on chosen slot
     const dataIdx = 'span[data-idx=\"' + chosenSlot.dataIdx + '\"]'
     console.log(dataIdx)
-    await wrapper(page, index++, debugPath, async (frame) => { 
+    page.$eval(dataIdx, elem => elem.click());
+    /**await wrapper(page, index++, debugPath, async (frame) => { 
         const element = await frame.waitForSelector(dataIdx, { timeout: TIMEOUT_MS }); 
         page.hover(dataIdx);
         await sleep(2500)
         await element.click() 
-    })
+    })*/
 
     // Selectable class must change in selectable on class
     // Retrieve class and make sure the new class is selectable on
