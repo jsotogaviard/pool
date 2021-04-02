@@ -27,7 +27,7 @@
         "--trace-warnings",
         "--inspect-brk",
         "src/main",
-        "bellevue",
+        "castex",
       ],
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
