@@ -117,8 +117,10 @@ const chooseSlot = async (freeSlots, bookedSlots) => {
     // Chose the first one
     if (freeNotBookedSlots && freeNotBookedSlots.length > 0) {
         console.log(JSON.stringify(freeNotBookedSlots))
+        console.log("Chosen slot " + JSON.stringify(freeNotBookedSlots[0]))
         return freeNotBookedSlots[0]
     } else {
+        console.log("No chosen slot ")
         return
     }
 }
