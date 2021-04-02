@@ -224,9 +224,9 @@ const wrapper = async (page, index, debugPath, action) => {
     try {
         const frame = page.mainFrame();
         await action(frame)
-        await page.screenshot({ path: debugPath + index + "_screenshot.png" })
-        const html = await page.evaluate(() => document.querySelector('*').outerHTML);
-        fs.writeFileSync(debugPath + index + "_page.html", html);
+        //await page.screenshot({ path: debugPath + index + "_screenshot.png" })
+        //const html = await page.evaluate(() => document.querySelector('*').outerHTML);
+        //fs.writeFileSync(debugPath + index + "_page.html", html);
     } catch (error) {
         console.log(error)
     }
