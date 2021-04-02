@@ -11,3 +11,4 @@ await main(
     BOOKED_SLOTS_PATH,
     FREE_SLOTS_URL
 )
+process.exit(1)
