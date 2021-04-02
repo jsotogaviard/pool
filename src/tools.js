@@ -19,6 +19,7 @@ const START_TIME = new Date();
  * @returns 
  */
 const prepareDebugPath = async (poolName) => {
+    console.log(START_TIME.toLocaleString())
     const debugPath = "./data/" + START_TIME.toLocaleString().replaceAll("/", "_").replaceAll(", ", "_").replaceAll(":", "_").replaceAll(" ", "_") + "_" + new Date().getMilliseconds() + "_" + poolName + '/'
     fs.mkdirSync(debugPath);
     return debugPath
