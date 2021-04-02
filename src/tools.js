@@ -153,12 +153,14 @@ const confirmSlot = async (debugPath, freeSlotsUrl, chosenSlot) => {
     await wrapper(page, index++, debugPath, async (frame) => { const element = await frame.waitForSelector("#form_f2", { timeout: TIMEOUT_MS }); await element.click(); await element.type("Jonathan") })
     await wrapper(page, index++, debugPath, async (frame) => { const element = await frame.waitForSelector("#form_f21", { timeout: TIMEOUT_MS }); await element.click(); await element.type("jsotogaviard@gmail.com") })
     await wrapper(page, index++, debugPath, async (frame) => { const element = await frame.waitForSelector("#form_f4", { timeout: TIMEOUT_MS }); await element.click(); await element.type("0678135845") })
-    await sleep(2500)
+    
     // Click on chosen slot
     const dataIdx = 'span[data-idx=\"' + chosenSlot.dataIdx + '\"]'
     console.log(dataIdx)
     await wrapper(page, index++, debugPath, async (frame) => { 
         const element = await frame.waitForSelector(dataIdx, { timeout: TIMEOUT_MS }); 
+        page.hover(dataIdx);
+        await sleep(2500)
         await element.click() 
     })
 
@@ -221,7 +223,7 @@ const wrapper = async (page, index, debugPath, action) => {
     try {
         const frame = page.mainFrame();
         await action(frame)
-        await page.screenshot({ path: debugPath + index + "_screenshot.png", fullPage: true })
+        await page.screenshot({ path: debugPath + index + "_screenshot.png" })
         const html = await page.evaluate(() => document.querySelector('*').outerHTML);
         fs.writeFileSync(debugPath + index + "_page.html", html);
     } catch (error) {
