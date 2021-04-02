@@ -25,6 +25,10 @@ const prepareDebugPath = async (poolName) => {
     return debugPath
 }
 
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
 /**
  * Get free slots from url
  * 
@@ -50,9 +54,9 @@ const getFreeSlots = async (debugPath, freeSlotsUrl, poolName) => {
     await wrapper(page, index++, debugPath, async _ => { await page.goto(freeSlotsUrl, { waitUntil: 'networkidle2' }); })
 
     // Select the pool
-    await wrapper(page, index++, debugPath, async (frame) => { await frame.select('select#form_f8', poolId.toString()); })
-
-   const freeSlots = await page.$$eval('span[class=\"selectable\"]', options => options.map(
+    await wrapper(page, index++, debugPath, async (frame) => { await frame.select('select#form_f8', poolId.toString()), await sleep(2500);})
+   
+    const freeSlots = await page.$$eval('span[class=\"selectable\"]', options => options.map(
         option => (
             {
                 slotTime: option.parentElement.firstChild.innerText.replace(/(\r\n|\n|\r)/gm, " ") + "@" + option.innerHTML,
@@ -70,6 +74,8 @@ const getFreeSlots = async (debugPath, freeSlotsUrl, poolName) => {
     browser.close()
     return freeSlots
 }
+
+
 
 /**
  * Booked slots path
@@ -123,7 +129,7 @@ const chooseSlot = async (freeSlots, bookedSlots) => {
  * @param {*} chosenSlot 
  * @returns 
  */
-const confirmSlot = async (debugPath, chosenSlot) => {
+const confirmSlot = async (debugPath, freeSlotsUrl, chosenSlot) => {
 
     // No chosen slot..., no work
     if (!chosenSlot) return chosenSlot
@@ -133,10 +139,10 @@ const confirmSlot = async (debugPath, chosenSlot) => {
     let index = 0
 
     // Go to web page
-    await wrapper(page, index++, async _ => { await page.goto(url, { waitUntil: 'networkidle2' }); })
+    await wrapper(page, index++, debugPath, async _ => { await page.goto(freeSlotsUrl, { waitUntil: 'networkidle2' }); })
 
     // Select THE pool
-    const poolId = POOLS[chooseSlot.pool]
+    const poolId = POOLS[chosenSlot.pool]
     await wrapper(page, index++, debugPath, async (frame) => { await frame.select('select#form_f8', poolId.toString()); })
 
     // Click on accept checkbox
@@ -147,14 +153,19 @@ const confirmSlot = async (debugPath, chosenSlot) => {
     await wrapper(page, index++, debugPath, async (frame) => { const element = await frame.waitForSelector("#form_f2", { timeout: TIMEOUT_MS }); await element.click(); await element.type("Jonathan") })
     await wrapper(page, index++, debugPath, async (frame) => { const element = await frame.waitForSelector("#form_f21", { timeout: TIMEOUT_MS }); await element.click(); await element.type("jsotogaviard@gmail.com") })
     await wrapper(page, index++, debugPath, async (frame) => { const element = await frame.waitForSelector("#form_f4", { timeout: TIMEOUT_MS }); await element.click(); await element.type("0678135845") })
-
+    await sleep(2500)
     // Click on chosen slot
-    await wrapper(page, index++, debugPath, async (frame) => { const element = await frame.waitForSelector('span[data-idx=\"' + chosenSlot.dataIdx + '\"]', { timeout: TIMEOUT_MS }); await element.click() })
+    const dataIdx = 'span[data-idx=\"' + chosenSlot.dataIdx + '\"]'
+    console.log(dataIdx)
+    await wrapper(page, index++, debugPath, async (frame) => { 
+        const element = await frame.waitForSelector(dataIdx, { timeout: TIMEOUT_MS }); 
+        await element.click() 
+    })
 
     // Selectable class must change in selectable on class
     // Retrieve class and make sure the new class is selectable on
-    const classAttributeChosenSlot = await page.$$eval('span[data-idx=\"' + chosenSlot.dataIdx + '\"]', el => el.map(x => x.getAttribute("class")));
-    console.log("Class of chosen slot after click " + JSON.stringify(attr))
+    const classAttributeChosenSlot = await page.$$eval(dataIdx, el => el.map(x => x.getAttribute("class")));
+    console.log("Class of chosen slot after click " + JSON.stringify(classAttributeChosenSlot))
     if (classAttributeChosenSlot && classAttributeChosenSlot.length > 0 && classAttributeChosenSlot[0] == "selectable on") {
 
         // We can proceed. Validate the form
@@ -210,7 +221,7 @@ const wrapper = async (page, index, debugPath, action) => {
     try {
         const frame = page.mainFrame();
         await action(frame)
-        await page.screenshot({ path: debugPath + index + "_screenshot.png" })
+        await page.screenshot({ path: debugPath + index + "_screenshot.png", fullPage: true })
         const html = await page.evaluate(() => document.querySelector('*').outerHTML);
         fs.writeFileSync(debugPath + index + "_page.html", html);
     } catch (error) {
@@ -241,7 +252,7 @@ const main = async (poolName, bookedSlotsPath, freeSlotsUrl, confirmSlotFunction
     const chosenSlot = await chooseSlot(freeSlots, bookedSlots)
 
     // Confirm chosen slot with external server
-    const confirmedSlot = await confirmSlotFunction(debugPath, chosenSlot)
+    const confirmedSlot = await confirmSlotFunction(debugPath, freeSlotsUrl, chosenSlot)
 
     // Store in database if confirmed slot is confirmed
     const storedSlot = await storeSlot(bookedSlotsPath, confirmedSlot)

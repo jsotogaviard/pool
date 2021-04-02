@@ -9,7 +9,7 @@
   },
   "scripts": {
     "main": "node --experimental-vm-modules src/main.js",
-    "debug-main": "node --inspect-brk src/main.js",
+    "debug-main": "node --trace-warnings --experimental-vm-modules --inspect-brk src/main.js",
     "test": "node  --trace-warnings --experimental-vm-modules ./node_modules/jest/bin/jest.js --runInBand",
     "debug-test": "node  --trace-warnings --experimental-vm-modules --inspect-brk ./node_modules/jest/bin/jest.js --runInBand --watchAll"
   },
